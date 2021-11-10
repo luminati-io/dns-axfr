@@ -236,7 +236,6 @@ dns.resolveAxfr = function(server, domain, callback) {
     /* Connect and send request */
     var socket = net.connect(port, hostname, function(arguments) {
         socket.write(buffer.toString('binary'), 'binary');
-        socket.end();
     });
 
     if (timeout)
@@ -265,6 +264,7 @@ dns.resolveAxfr = function(server, domain, callback) {
                 socket.destroy();
                 callback(res, "Error on response");
             }
+            socket.end();
         }
 
         /* Check if response was larger than expected */
