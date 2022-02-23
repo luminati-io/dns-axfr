@@ -81,7 +81,7 @@ function parseResponse(response, result) {
 
     /* Check for error code */
     if ((response[5] & 0x0F) != 0)
-        return -3;
+        return {error: true, code: -3, data: response.toString()};
 
     var questions = response.readUInt16BE(6);
     var answers = response.readUInt16BE(8);
@@ -260,7 +260,7 @@ dns.resolveAxfr = function(server, domain, callback) {
             var tmpBuf = buf.slice(0, (len + 2));
             var res = parseResponse(tmpBuf, results);
 
-            if (typeof res !== 'object') {
+            if (typeof res !== 'object' || res.error) {
                 socket.destroy();
                 callback(res, "Error on response");
             }
